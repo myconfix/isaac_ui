@@ -1,0 +1,15 @@
+<RCC>
+    <qresource prefix="/">
+        <file>iSAACUI1.png</file>
+        <file>iSAACUI2.png</file>
+        <file>iSAACUI3.png</file>
+        <file>iSAACUI4.png</file>
+        <file>iSAACUI5.png</file>
+        <file>iSAACUI6.png</file>
+        <file>iSAACUI7.png</file>
+        <file>iSAACUI8.png</file>
+        <file>iSAACUI9.png</file>
+        <file>iSAACUI10.png</file>
+        <file>iSAACUI11.png</file>
+    </qresource>
+</RCC>
