@@ -2,6 +2,12 @@
 #define ISAAC_H
 
 #include <QWidget>
+#include "keythread.h"
+
+#define bt_back_pin  25
+#define bt_next_pin  27
+#define bt_add_pin  28
+#define bt_minus_pin 29
 
 namespace Ui {
 class isaac;
@@ -25,6 +31,8 @@ private slots:
 
     void on_bt_neg_clicked();
     void wgroup(bool en);
+    void keylog(int key);
+
 private:
     Ui::isaac *ui;
     int page=0;

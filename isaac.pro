@@ -13,11 +13,16 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        isaac.cpp
+        isaac.cpp \
+    keythread.cpp
 
-HEADERS  += isaac.h
+HEADERS  += isaac.h \
+    keythread.h
 
 FORMS    += isaac.ui
 
 RESOURCES += \
     resource.qrc
+
+LIBS += -L/usr/local/lib -lwiringPi
+INCLUDEPATH += /usr/local/include

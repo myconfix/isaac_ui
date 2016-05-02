@@ -1,17 +1,21 @@
 #include "isaac.h"
 #include "ui_isaac.h"
 #include "QDebug"
+#include "wiringPi.h"
+#include "keythread.h"
 
 isaac::isaac(QWidget *parent) :
     QWidget(parent),
     ui(new Ui::isaac)
 {
+
     ui->setupUi(this);
     QPixmap mypix(p1);
     ui->lb_background->setPixmap(mypix);
     checkDisplay(0);
     wgroup(false);
     ui->pb_transmit->setVisible(false);
+
 }
 
 isaac::~isaac()
@@ -154,3 +158,17 @@ void isaac::wgroup(bool en)
         ui->lb_value->setVisible(true);
     }
 }
+void isaac::keylog(int key)
+{
+    qDebug() << key;
+}
+/*
+void isaac::on_pushButton_3_clicked()
+{
+
+    qDebug() << "Back press = " << digitalRead(bt_back_pin);
+    qDebug() << "Next press = " << digitalRead(bt_add_pin);
+    qDebug() << "Minus press = " << digitalRead(bt_minus_pin);
+    qDebug() << "Add press = " << digitalRead(bt_add_pin);
+}
+*/
