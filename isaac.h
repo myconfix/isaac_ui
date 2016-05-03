@@ -4,10 +4,10 @@
 #include <QWidget>
 #include "keythread.h"
 
-#define bt_back_pin  25
-#define bt_next_pin  27
-#define bt_add_pin  28
-#define bt_minus_pin 29
+#define bt_back_pin  28
+#define bt_next_pin  29
+#define bt_add_pin  25
+#define bt_minus_pin 27
 
 namespace Ui {
 class isaac;
@@ -20,6 +20,7 @@ class isaac : public QWidget
 public:
     explicit isaac(QWidget *parent = 0);
     ~isaac();
+    keythread *rpikeythread;
 
 private slots:
     void on_pushButton_clicked();
@@ -32,11 +33,14 @@ private slots:
     void on_bt_neg_clicked();
     void wgroup(bool en);
     void keylog(int key);
+    void update_tm();
+
+    //void on_pushButton_3_clicked();
 
 private:
     Ui::isaac *ui;
     int page=0;
-    QString dataArray[10];
+    QString dataArray[11];
     QString p1 =":/iSAACUI1.png";
     QString p2 =":/iSAACUI2.png";
     QString p3 =":/iSAACUI3.png";
@@ -49,6 +53,7 @@ private:
     QString p10 =":/iSAACUI10.png";
     QString p11 =":/iSAACUI11.png";
 
+     QTimer *tm;
 };
 
 #endif // ISAAC_H

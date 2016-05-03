@@ -3,6 +3,7 @@
 #include "QDebug"
 #include "wiringPi.h"
 #include "keythread.h"
+#include <QTimer>
 
 isaac::isaac(QWidget *parent) :
     QWidget(parent),
@@ -15,7 +16,18 @@ isaac::isaac(QWidget *parent) :
     checkDisplay(0);
     wgroup(false);
     ui->pb_transmit->setVisible(false);
+    ui->bt_neg->setVisible(false);
+    ui->bt_plus->setVisible(false);
+    ui->pushButton->setVisible(false);
+    ui->pushButton_2->setVisible(false);
 
+    rpikeythread = new keythread(this);
+    rpikeythread->start();
+
+    connect(rpikeythread,SIGNAL(rpikeyevent(int)),this,SLOT(keylog(int)));
+
+   tm =new QTimer(this);
+    connect(tm,SIGNAL(timeout()),this,SLOT(update_tm()));
 }
 
 isaac::~isaac()
@@ -88,11 +100,16 @@ void isaac::checkDisplay(int index)
     if(page ==9)
     {
         //Progress bar
-        ui->pb_transmit->setValue(30);
+
+        ui->pb_transmit->setValue(0);
         ui->pb_transmit->setVisible(true);
+
+        tm->start(100);
+
     }else {
         ui->pb_transmit->setVisible(false);
     }
+
     switch (index) {
         case 0 : {
         changeDisplay(p1);
@@ -149,26 +166,76 @@ void isaac::on_bt_neg_clicked()
 void isaac::wgroup(bool en)
 {
     if(!en){
-    ui->bt_neg->setVisible(false);
-    ui->bt_plus->setVisible(false);
+   // ui->bt_neg->setVisible(false);
+  //  ui->bt_plus->setVisible(false);
     ui->lb_value->setVisible(false);
     }else {
-        ui->bt_neg->setVisible(true);
-        ui->bt_plus->setVisible(true);
+    //    ui->bt_neg->setVisible(true);
+    //    ui->bt_plus->setVisible(true);
         ui->lb_value->setVisible(true);
     }
 }
 void isaac::keylog(int key)
 {
     qDebug() << key;
-}
-/*
-void isaac::on_pushButton_3_clicked()
-{
+    switch (key){
+    case bt_next_pin : {
+        if(!tm->isActive())
+        {
+        page++;
+        }
+        qDebug() << page;
+        dataArray[page-1]=ui->lb_value->text();
+        ui->lb_value->setText("0");
+        qDebug() << "dataArray[" << page-1 <<"] = " <<dataArray[page-1];
+        if(page >=11) {
+            page=0;
+               }
+            checkDisplay(page);
 
-    qDebug() << "Back press = " << digitalRead(bt_back_pin);
-    qDebug() << "Next press = " << digitalRead(bt_add_pin);
-    qDebug() << "Minus press = " << digitalRead(bt_minus_pin);
-    qDebug() << "Add press = " << digitalRead(bt_add_pin);
+    }break;
+    case bt_back_pin : {
+        page--;
+        if(page<0)
+            page =0;
+        checkDisplay(page);
+        ui->lb_value->setText(dataArray[page]);
+        qDebug() << page;
+
+    }break;
+    case bt_add_pin : {
+        int temp =ui->lb_value->text().toInt();
+        temp++;
+        ui->lb_value->setText(QString::number(temp));
+    }break;
+    case bt_minus_pin : {
+        int temp =ui->lb_value->text().toInt();
+        temp--;
+        if(temp<0)
+            temp=0;
+        ui->lb_value->setText(QString::number(temp));
+
+    }break;
+    }
 }
-*/
+void isaac::update_tm()
+{
+    ui->pb_transmit->setValue(ui->pb_transmit->value()+1);
+    if(ui->pb_transmit->value()>100){
+        tm->stop();
+        ui->pb_transmit->setValue(0);
+        page =10;
+        checkDisplay(page);
+    }
+}
+//void isaac::on_pushButton_3_clicked()
+//{
+
+//    qDebug() << "Back press = " << digitalRead(bt_back_pin);
+//    qDebug() << "Next press = " << digitalRead(bt_next_pin);
+//    qDebug() << "Minus press = " << digitalRead(bt_minus_pin);
+//    qDebug() << "Add press = " << digitalRead(bt_add_pin);
+//}
+
+
+

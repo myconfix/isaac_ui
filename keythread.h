@@ -12,12 +12,12 @@ public:
     void run();
 
 signals:
-    void rpikeyevent();
+    void rpikeyevent(int pin);
 
 public slots:
 
 private :
-
+    int last_pin_status=0;
 };
 
 #endif // KEYTHREAD_H
